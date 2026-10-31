@@ -1,11 +1,16 @@
 # Daily: bump any spec whose upstream has a newer release, push the bumps, and
-# ask COPR to rebuild just those packages through their custom webhooks.
+# ask COPR to rebuild just those packages through their custom webhooks. Run by
+# hand with `rebuild` to rebuild packages without a bump.
 name: update
 
 on:
   schedule:
     - cron: '17 4 * * *'
   workflow_dispatch:
+    inputs:
+      rebuild:
+        description: Packages to rebuild without a version bump, space-separated
+        default: ''
 
 permissions:
   contents: write
@@ -32,13 +37,16 @@ jobs:
 
       # COPR clones the default branch, so the push has to land first.
       - name: Push and rebuild
-        if: steps.bump.outputs.packages != ''
+        if: steps.bump.outputs.packages != '' || inputs.rebuild != ''
         env:
-          PACKAGES: ${{ steps.bump.outputs.packages }}
+          BUMPED: ${{ steps.bump.outputs.packages }}
+          REBUILD: ${{ inputs.rebuild }}
           COPR_WEBHOOKS: ${{ secrets.COPR_WEBHOOKS }}
         run: |
-          git push
-          for p in $PACKAGES; do
+          if [ -n "$BUMPED" ]; then git push; fi
+          for p in $BUMPED $REBUILD; do
             url=$(awk -v p="$p" '$1 == p { print $2 }' <<<"$COPR_WEBHOOKS")
+            if [ -z "$url" ]; then echo "::error::no webhook for $p in COPR_WEBHOOKS"; exit 1; fi
             curl -fsS -X POST "$url"
+            echo "$p: rebuild requested"
           done

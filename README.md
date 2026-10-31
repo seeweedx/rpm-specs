@@ -23,7 +23,8 @@ Releases start at `0.1`, so a package Fedora ships itself replaces these.
 `upstream.tsv` whose upstream has a newer GitHub release, it sets `Version`,
 resets `Release` to `0.1`, adds a changelog entry and commits. After pushing,
 it calls each bumped package's COPR custom webhook, listed one per line as
-`<package> <url>` in the `COPR_WEBHOOKS` secret.
+`<package> <url>` in the `COPR_WEBHOOKS` secret. Running the workflow by hand
+with `rebuild` set to package names rebuilds those without a bump.
 
 COPR builds each package from this repository with the `make_srpm` method:
 `.copr/Makefile` downloads the spec's sources and packs the SRPM.
