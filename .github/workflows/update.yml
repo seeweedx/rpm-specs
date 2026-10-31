@@ -23,7 +23,7 @@ jobs:
       # git before checkout, so it clones instead of downloading a tarball.
       - run: dnf -y install git-core jq rpm-build
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Bump specs
         id: bump
