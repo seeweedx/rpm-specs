@@ -1,0 +1,44 @@
+# Daily: bump any spec whose upstream has a newer release, push the bumps, and
+# ask COPR to rebuild just those packages through their custom webhooks.
+name: update
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      # git before checkout, so it clones instead of downloading a tarball.
+      - run: dnf -y install git-core jq rpm-build
+
+      - uses: actions/checkout@v4
+
+      - name: Bump specs
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name seeweedx
+          git config user.email git.atlas138@passmail.com
+          echo "packages=$(./update.sh | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+
+      # COPR clones the default branch, so the push has to land first.
+      - name: Push and rebuild
+        if: steps.bump.outputs.packages != ''
+        env:
+          PACKAGES: ${{ steps.bump.outputs.packages }}
+          COPR_WEBHOOKS: ${{ secrets.COPR_WEBHOOKS }}
+        run: |
+          git push
+          for p in $PACKAGES; do
+            url=$(awk -v p="$p" '$1 == p { print $2 }' <<<"$COPR_WEBHOOKS")
+            curl -fsS -X POST "$url"
+          done
