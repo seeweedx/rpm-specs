@@ -5,6 +5,7 @@ one project per package, built from source for Fedora on aarch64 and x86_64.
 
 | Package | Install |
 | --- | --- |
+| bluetui | `dnf copr enable seaweed/bluetui` |
 | cclip | `dnf copr enable seaweed/cclip` |
 | fsel | `dnf copr enable seaweed/fsel` |
 | keepassxc | `dnf copr enable seaweed/keepassxc` |
