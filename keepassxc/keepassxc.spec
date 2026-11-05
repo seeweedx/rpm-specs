@@ -4,13 +4,23 @@
 # below 1 so Fedora's own 2.8 build replaces this once it reaches them.
 Name:           keepassxc
 Version:        2.8.0
-Release:        0.1%{?dist}
+Release:        0.2%{?dist}
 Summary:        Cross-platform password manager
 License:        GPL-2.0-or-later AND BSD-2-Clause AND MIT AND CC0-1.0 AND Apache-2.0 AND LGPL-2.0-only AND LGPL-2.1-only
 URL:            https://keepassxc.org/
 Source0:        https://github.com/keepassxreboot/keepassxc/releases/download/%{version}/keepassxc-%{version}-src.tar.xz
 Source1:        https://github.com/keepassxreboot/keepassxc/releases/download/%{version}/keepassxc-%{version}-src.tar.xz.sig
 Source2:        https://keepassxc.org/keepassxc_master_signing_key.asc
+
+# A database unlocked by AutoOpen never gets Quick Unlock, so a Secret Service
+# prompt for it asks for its full key. The first patch is upstream's fix for
+# AutoOpen raising a Polkit prompt for a database that already has Quick Unlock,
+# milestoned for 2.8.1: drop it once a release carries it, as it will then no
+# longer apply. The second, which needs the first, saves Quick Unlock for keys
+# AutoOpen or --pw-stdin supply. Fedora's own build carries neither.
+# https://github.com/keepassxreboot/keepassxc/pull/13831
+Patch0:         keepassxc-pr13831-autoopen-no-quick-unlock.patch
+Patch1:         keepassxc-quick-unlock-supplied-keys.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 # due zxcvbn-c not being available on 32bit x86
@@ -108,7 +118,7 @@ information can be considered as quite safe.
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 # Older version of appstream-util can't parse some url types
 %if 0%{?rhel} == 9
@@ -172,6 +182,10 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.%{nam
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Fri Nov 06 2026 seeweedx <git.atlas138@passmail.com> - 2.8.0-0.2
+- Backport upstream PR 13831 to keep AutoOpen from raising Quick Unlock prompts
+- Save Quick Unlock credentials for databases unlocked by AutoOpen
+
 * Sun Nov 01 2026 seeweedx <git.atlas138@passmail.com> - 2.8.0-0.1
 - Rebuild rawhide's 2.8.0-3 for Fedora 44 and 45
 

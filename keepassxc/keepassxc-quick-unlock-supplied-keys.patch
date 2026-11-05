@@ -1,0 +1,31 @@
+From 241f872250654aeb9ed7bd997b8ee56e6b3fe066 Mon Sep 17 00:00:00 2001
+From: seeweedx <git.atlas138@passmail.com>
+Date: Fri, 6 Nov 2026 01:12:42 +0800
+Subject: [PATCH] Save Quick Unlock credentials for supplied keys
+
+AutoOpen and --pw-stdin unlock through enterKey(), which kept the key
+out of Quick Unlock. A database AutoOpen unlocks then needs its full key
+when unlocked on its own, such as from a Secret Service prompt.
+---
+ src/gui/DatabaseOpenWidget.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/gui/DatabaseOpenWidget.cpp b/src/gui/DatabaseOpenWidget.cpp
+index 2a330b1..c6303c9 100644
+--- a/src/gui/DatabaseOpenWidget.cpp
++++ b/src/gui/DatabaseOpenWidget.cpp
+@@ -332,7 +332,10 @@ void DatabaseOpenWidget::enterKey(const QString& pw, const QString& keyFile)
+ 
+ void DatabaseOpenWidget::openDatabase()
+ {
+-    bool blockQuickUnlock = m_blockQuickUnlock || isOnQuickUnlockScreen();
++    // Save Quick Unlock credentials for keys supplied by AutoOpen or the command
++    // line too, so such a database can later be quick unlocked on its own.
++    // m_blockQuickUnlock still keeps buildDatabaseKey() from prompting for them.
++    bool blockQuickUnlock = isOnQuickUnlockScreen();
+ 
+     setUserInteractionLock(true);
+     m_ui->editPassword->setShowPassword(false);
+-- 
+2.56.0
+
