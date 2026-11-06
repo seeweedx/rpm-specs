@@ -11,6 +11,7 @@ one project per package, built from source for Fedora on aarch64 and x86_64.
 | keepassxc | `dnf copr enable seaweed/keepassxc` |
 | lazygit | `dnf copr enable seaweed/lazygit` |
 | llama-cpp | `dnf copr enable seaweed/llama-cpp` |
+| opencode | `dnf copr enable seaweed/opencode` |
 | otter-launcher | `dnf copr enable seaweed/otter-launcher` |
 | starship | `dnf copr enable seaweed/starship` |
 | wlctl | `dnf copr enable seaweed/wlctl` |
