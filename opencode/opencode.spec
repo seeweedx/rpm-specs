@@ -26,6 +26,10 @@ Source2:        https://github.com/oven-sh/bun/releases/download/bun-v%{bun_vers
 
 ExclusiveArch:  x86_64 aarch64
 
+# node-gyp compiles the native tree-sitter grammars bun install pulls in.
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  python3
 BuildRequires:  unzip
 BuildRequires:  zsh
 
