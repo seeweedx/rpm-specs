@@ -4,7 +4,7 @@
 
 # Release stays below 1 so a Fedora package, should one appear, replaces this.
 Name:           lazygit
-Version:        0.66.2
+Version:        0.66.3
 Release:        0.1%{?dist}
 Summary:        Simple terminal UI for git commands
 License:        MIT
@@ -36,5 +36,8 @@ install -Dm0755 %{name} %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Sun Nov 08 2026 seeweedx <git.atlas138@passmail.com> - 0.66.3-0.1
+- Update to upstream v0.66.3
+
 * Sun Nov 01 2026 seeweedx <git.atlas138@passmail.com> - 0.66.2-0.1
 - Package upstream v0.66.2
