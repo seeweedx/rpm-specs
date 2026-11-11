@@ -4,7 +4,7 @@
 
 # Release stays below 1 so a Fedora package, should one appear, replaces this.
 Name:           fsel
-Version:        4.0.0
+Version:        4.1.0
 Release:        0.1%{?dist}
 Summary:        Fast TUI app launcher and fuzzy finder
 License:        BSD-2-Clause
@@ -36,5 +36,8 @@ install -Dm0644 %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Wed Nov 11 2026 seeweedx <git.atlas138@passmail.com> - 4.1.0-0.1
+- Update to upstream 4.1.0
+
 * Sun Nov 01 2026 seeweedx <git.atlas138@passmail.com> - 4.0.0-0.1
 - Package upstream 4.0.0
