@@ -15,7 +15,7 @@
 
 # Release stays below 1 so a Fedora package, should one appear, replaces this.
 Name:           opencode
-Version:        1.19.5
+Version:        1.19.6
 Release:        0.1%{?dist}
 Summary:        Open source AI coding agent for the terminal
 License:        MIT
@@ -80,5 +80,8 @@ install -Dm0644 opencode.bash \
 %{_datadir}/zsh/site-functions/_opencode
 
 %changelog
+* Tue Nov 17 2026 seeweedx <git.atlas138@passmail.com> - 1.19.6-0.1
+- Update to upstream v1.19.6
+
 * Fri Nov 06 2026 seeweedx <git.atlas138@passmail.com> - 1.19.5-0.1
 - Package upstream v1.19.5
