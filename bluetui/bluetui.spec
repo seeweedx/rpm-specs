@@ -5,7 +5,7 @@
 
 # Release stays below 1 so a Fedora package, should one appear, replaces this.
 Name:           bluetui
-Version:        0.8.2
+Version:        0.8.3
 Release:        0.1%{?dist}
 Summary:        Bluetooth TUI for BlueZ
 License:        GPL-3.0-only
@@ -37,5 +37,8 @@ install -Dm0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+* Mon Nov 23 2026 seeweedx <git.atlas138@passmail.com> - 0.8.3-0.1
+- Update to upstream v0.8.3
+
 * Mon Nov 02 2026 seeweedx <git.atlas138@passmail.com> - 0.8.2-0.1
 - Package upstream v0.8.2
