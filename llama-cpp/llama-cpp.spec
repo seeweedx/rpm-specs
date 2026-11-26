@@ -7,7 +7,7 @@
 # so this replaces Fedora's package, sonames included, until Fedora adopts them.
 # Release stays below 1 so a Fedora build of the same version would win.
 Name:           llama-cpp
-Version:        1.0.0
+Version:        1.1.0
 Release:        0.1%{?dist}
 Summary:        LLM inference in C/C++ with the Vulkan backend
 License:        MIT
@@ -16,7 +16,7 @@ Source0:        %{url}/archive/v%{version}/llama.cpp-%{version}.tar.gz
 # The server embeds a web UI that the build otherwise fetches from Hugging Face,
 # which COPR's offline builders cannot reach. Upstream publishes it only with
 # the nightly build a release was cut from; update.sh keeps nightly in step.
-%global nightly b12359
+%global nightly b12774
 Source1:        %{url}/releases/download/%{nightly}/llama-%{nightly}-ui.tar.gz
 
 ExclusiveArch:  x86_64 aarch64
@@ -98,6 +98,9 @@ tar -xzf %{SOURCE1} -C tools/ui/dist --strip-components=1
 %{_libdir}/pkgconfig/llama.pc
 
 %changelog
+* Thu Nov 26 2026 seeweedx <git.atlas138@passmail.com> - 1.1.0-0.1
+- Update to upstream v1.1.0
+
 * Fri Nov 13 2026 seeweedx <git.atlas138@passmail.com> - 1.0.0-0.1
 - Update to upstream v1.0.0
 
